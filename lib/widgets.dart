@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:palindrome_flutter/models/user_model.dart';
+import 'package:palindrome_flutter/providers/user_providers.dart';
 import 'package:palindrome_flutter/them.dart';
 
 Widget input(controller, {double marginBottom = 0, String placeholder = ''}) {
@@ -99,5 +100,46 @@ Widget cardUser(UserModel user) {
         ),
       ),
     ),
+  );
+}
+
+Widget listViewSUers(
+  ScrollController scrollController,
+  UserProvider userProvider,
+  Function fetchData,
+  Function setState,
+) {
+  return RefreshIndicator(
+    child: ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
+      controller: scrollController,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      itemCount: userProvider.users.length + 1,
+      itemBuilder: (BuildContext ctx, int index) {
+        if (index == userProvider.users.length) {
+          return Visibility(
+            visible: userProvider.loading,
+            child: const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+              ),
+            ),
+          );
+        }
+
+        UserModel user = userProvider.users[index];
+        return cardUser(user);
+      },
+    ),
+    onRefresh: () {
+      return Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          setState();
+          userProvider.loading = true;
+          fetchData();
+        },
+      );
+    },
   );
 }

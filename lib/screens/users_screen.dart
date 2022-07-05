@@ -36,7 +36,6 @@ class _UserscreenState extends State<Userscreen> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
-
     scrollController.addListener(() async {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -49,47 +48,20 @@ class _UserscreenState extends State<Userscreen> {
         }
       }
     });
-
     return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: const Text("Users"),
-      ),
-      body: RefreshIndicator(
-        child: ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          itemCount: userProvider.users.length + 1,
-          itemBuilder: (BuildContext ctx, int index) {
-            if (index == userProvider.users.length) {
-              return Visibility(
-                visible: userProvider.loading,
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                  ),
-                ),
-              );
-            }
-
-            UserModel user = userProvider.users[index];
-            return cardUser(user);
-          },
+        key: scaffoldKey,
+        appBar: AppBar(
+          title: const Text("Users"),
         ),
-        onRefresh: () {
-          return Future.delayed(
-            const Duration(seconds: 1),
-            () {
-              setState(() {
-                page = 1;
-              });
-              userProvider.loading = true;
-              fetchData(page);
-            },
-          );
-        },
-      ),
-    );
+        body: listViewSUers(
+          scrollController,
+          userProvider,
+          fetchData,
+          () {
+            setState(() {
+              page = 1;
+            });
+          },
+        ));
   }
 }
