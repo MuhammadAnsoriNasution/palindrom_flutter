@@ -39,6 +39,7 @@ class UserProvider with ChangeNotifier {
       totalPage = data['total_item'];
     } catch (e) {
       loading = false;
+      // ignore: avoid_print
       print(e);
     }
   }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:palindrome_flutter/models/profile_model.dart';
 import 'package:palindrome_flutter/models/user_model.dart';
+import 'package:palindrome_flutter/providers/profile_provider.dart';
 import 'package:palindrome_flutter/providers/user_providers.dart';
+import 'package:palindrome_flutter/screens/home_screen.dart';
 import 'package:palindrome_flutter/them.dart';
+import 'package:provider/provider.dart';
 
 Widget input(controller, {double marginBottom = 0, String placeholder = ''}) {
   return Container(
@@ -60,12 +64,79 @@ Widget button({
   );
 }
 
-Widget cardUser(UserModel user) {
+alertDialog(UserModel user, BuildContext context) {
+  ProfileProvider profileProvider =
+      Provider.of<ProfileProvider>(context, listen: false);
+
+  return AlertDialog(
+    alignment: Alignment.bottomCenter,
+    contentPadding: const EdgeInsets.all(10),
+    insetPadding: EdgeInsets.zero,
+    scrollable: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(32.0),
+        topRight: Radius.circular(32.0),
+      ),
+    ),
+    content: SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(150),
+            child: Image.network(
+              user.avatar,
+              width: 150,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            '${user.firstName} ${user.lastName}',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(
+            height: 33,
+          ),
+        ],
+      ),
+    ),
+    actions: [
+      button(
+          onTap: () {
+            profileProvider.profile = ProfileModel(
+              avatar: user.avatar,
+              name: '${user.firstName} ${user.lastName}',
+              email: user.email,
+            );
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const HomeScreen(name: '')),
+              (Route<dynamic> route) => false,
+            );
+          },
+          label: 'Select')
+    ],
+  );
+}
+
+Widget cardUser(UserModel user, BuildContext context) {
   return Card(
     child: InkWell(
-      onTap: () {
-        print("a");
-      },
+      onTap: () => showDialog<String>(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: false,
+        builder: (BuildContext context) => alertDialog(user, context),
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -103,12 +174,8 @@ Widget cardUser(UserModel user) {
   );
 }
 
-Widget listViewSUers(
-  ScrollController scrollController,
-  UserProvider userProvider,
-  Function fetchData,
-  Function setState,
-) {
+Widget listViewSUers(ScrollController scrollController,
+    UserProvider userProvider, Function fetchData, Function setState) {
   return RefreshIndicator(
     child: ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -128,7 +195,7 @@ Widget listViewSUers(
         }
 
         UserModel user = userProvider.users[index];
-        return cardUser(user);
+        return cardUser(user, ctx);
       },
     ),
     onRefresh: () {

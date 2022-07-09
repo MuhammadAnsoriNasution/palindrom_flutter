@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:palindrome_flutter/providers/profile_provider.dart';
 import 'package:palindrome_flutter/screens/users_screen.dart';
+import 'package:palindrome_flutter/screens/website_screen.dart';
 import 'package:palindrome_flutter/them.dart';
 import 'package:palindrome_flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   final String name;
@@ -14,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+
     Widget empty() {
       return SizedBox(
         width: double.infinity,
@@ -36,6 +41,56 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 18,
                 color: Color(0xff808080),
               ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget profile() {
+      return SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(164),
+              child: Image.network(
+                profileProvider.profile.avatar,
+                width: 164,
+                height: 164,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(
+              height: 53,
+            ),
+            Text(
+              profileProvider.profile.name,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: secondary200Color),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              profileProvider.profile.email,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const WebsiteScreen()));
+              },
+              child: const Text("Website"),
             )
           ],
         ),
@@ -69,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: empty(),
+              child: profileProvider.profile.name != '' ? profile() : empty(),
             )
           ],
         ),

@@ -39,18 +39,16 @@ class _LoginScreenState extends State<LoginScreen> {
     handleCheckPalindrome() {
       if (isPalindrome()) {
         showSnackBar(message: "isPalinDrom", color: primaryColor);
-        return true;
       } else {
         showSnackBar(message: "not palindrome", color: Colors.red);
-        return false;
       }
     }
 
     handleNext() {
       if (nameController.text == '') {
         return showSnackBar(message: "Name is required", color: Colors.red);
-      } else if (!handleCheckPalindrome()) {
-        return null;
+      } else if (!isPalindrome()) {
+        return showSnackBar(message: "not palindrome", color: Colors.red);
       } else {
         Navigator.pushReplacement(
           context,
@@ -64,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 32),

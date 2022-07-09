@@ -47,7 +47,7 @@ android {
         applicationId "com.example.palindrome_flutter"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -65,7 +65,12 @@ android {
 flutter {
     source '../..'
 }
-
+configurations {
+    all*.exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
+}
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation ('com.mapbox.maps:android:10.6.1'){
+        exclude group: 'group_name', module: 'module_name'
+    }
 }

@@ -4,7 +4,7 @@ import 'package:palindrome_flutter/providers/user_providers.dart';
 import 'package:palindrome_flutter/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),
