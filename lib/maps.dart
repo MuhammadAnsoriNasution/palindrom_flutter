@@ -34,8 +34,7 @@ class _MapsState extends State<Maps> {
       children: [
         MapboxMap(
           onMapCreated: _onMapCreated,
-          accessToken:
-              'sk.eyJ1IjoiYW5zb3JpIiwiYSI6ImNsNTd4OWl1bTBmN24zbHVreDBqd3lsb2EifQ.ipme0Z7USdq_QPiH__KuHA',
+          accessToken: '',
           initialCameraPosition: _initialCameraPosition,
           // myLocationEnabled: false,
           // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
