@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:palindrome_flutter/them.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
 
@@ -21,7 +22,15 @@ class _WebsiteScreenState extends State<WebsiteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("WebsiteScreen"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: primaryColor),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: whiteColor,
+        title: Text(
+          "WebsiteScreen",
+          style: TextStyle(color: primaryColor),
+        ),
         centerTitle: true,
       ),
       body: const WebView(

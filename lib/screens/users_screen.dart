@@ -28,7 +28,6 @@ class _UserscreenState extends State<Userscreen> {
   void dispose() {
     super.dispose();
     scrollController.dispose();
-    scaffoldKey.currentState?.dispose();
   }
 
   fetchData(int page) {
@@ -51,8 +50,6 @@ class _UserscreenState extends State<Userscreen> {
       }
     });
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      key: scaffoldKey,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: primaryColor),
@@ -82,13 +79,15 @@ class _UserscreenState extends State<Userscreen> {
           ),
         ],
       ),
-      body: modeList
+      body: !modeList
           ? listViewSUers(scrollController, userProvider, fetchData, () {
               setState(() {
                 page = 1;
               });
             })
-          : const Maps(),
+          : Maps(
+              users: userProvider.users,
+            ),
     );
   }
 }
